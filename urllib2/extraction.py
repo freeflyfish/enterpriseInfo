@@ -35,13 +35,12 @@ class HtmlContent(object):
 			res[key] = value.encode('utf8')
 		abstract = self.content.xpath('//div[@class="container company-header-block "]//script[@id="company_base_info_detail"]/text()')
 		res["简介"] = abstract[0].strip()
-		res = json.dumps(res)
 		
 		return res 
 
 	def getMarketInfo(self):
 
-		pattern = '//div[@class="detail-list"]/div[@class="block-data-group"]/div[@id="nav-main-volatilityNum"]//table/tbody/tr/td/text()'
+		pattern = '//div[@class="detail-list"]/div[@class="block-data-group"]/div[@id="nav-main-volatilityNum"]//table/tbody/tr/td'
 		marketInfo = self.content.xpath(pattern)
 		res = {}
 		for i in xrange(0,len(marketInfo),2):
@@ -49,7 +48,6 @@ class HtmlContent(object):
 			key = key.xpath('string()')	
 			res[key] = value.xpath('string()')
 	
-		res = json.dumps(res)
 		
 		return res
 
@@ -78,31 +76,48 @@ class HtmlContent(object):
 			res[backgrounds[-1]] = self.content.xpath('//div[@class="detail-list"]//div[@id="_container_baseInfo"]/table[@class="table -striped-col -border-top-none"]//tr/td[@colspan="4"]/span//text/text()')
 		res["score"] = self.content.xpath('//div[@class="detail-list"]//div[@id="_container_baseInfo"]/table[@class="table -striped-col -border-top-none"]//tr/td/img/@alt')[0]
 		res["注册资本"] = self.content.xpath('//div[@class="detail-list"]//div[@id="_container_baseInfo"]/table[@class="table"]//tr/td//text/text()')[0]
-		res = json.dumps(res)
 		
 		return res
 	
 	def getLegalRisk(self):
-			
-		pass
+		res = {}
+		legalp1 = '//div[@id="nav-main-lawDangerous"]//div[@id="nav-main-announcementCount"]/span/text()'		
+		res["开庭公告数量"] = self.content.xpath(legalp1)[0]
+		legalp2 = '//div[@id="nav-main-lawDangerous"]//div[@id="nav-main-lawsuitCount"]/span/text()'		
+		res["法律诉讼数量"] = self.content.xpath(legalp2)[0]
+		
 
-	def getRunRisk(self):
-		pass
+		return res
+
 
 	def getOperationalRisk(self):
-		pass
+		res = {}
+		return res
 
 	def getDevHistory(self):
-		pass
+		res = {}
+		rongzi = '//div[@id="nav-main-develope"]//div[@id="nav-main-companyRongzi"]/span/text()'
+		res["融资次数"] = self.content.xpath(rongzi)[0]
+		jingpin = '//div[@id="nav-main-develope"]//div[@id="nav-main-companyJingpin"]/span/text()'
+		res["竞品数量"] = self.content.xpath(jingpin)[0]
+		
+		return res
 
 	def getBusinessStatus(self):
-		pass
+		res = {}
+		
+		return res
 
 	def getIntellectualProperty(self):
-		pass 
+		res = {}	 
+		ip = '//div[@id="nav-main-knowledgeProperty"]//div[@id="nav-main-patentCount"]/span/text()'
+		res["专利数量"] = self.content.xpath(ip)[0]
+		
+		return res
 
 	def getHistory(self):
-		pass
+		res = {}
+		return res
 
 	def info(self):
 		info = {}
@@ -130,5 +145,13 @@ if __name__ == "__main__":
 	#print profile
 	#market = Content.getMarketInfo()
 	#print market
-	back = Content.getBackgrounds()
-	print back
+	#back = Content.getBackgrounds()
+	#print back
+	#legal = Content.getLegalRisk()
+	#print legal
+	#history = Content.getDevHistory()
+	#print history
+	#ip = Content.getIntellectualProperty()
+	#print ip
+	info = Content.info()
+	print info
