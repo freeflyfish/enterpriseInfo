@@ -79,8 +79,8 @@ class HtmlContent(object):
 			
 		if n == 1:
 			res[backgrounds[-1]] = self.content.xpath('//div[@class="detail-list"]//div[@id="_container_baseInfo"]/table[@class="table -striped-col -border-top-none"]//tr/td[@colspan="4"]/span//text/text()')
-		res["score"] = self.content.xpath('//div[@class="detail-list"]//div[@id="_container_baseInfo"]/table[@class="table -striped-col -border-top-none"]//tr/td/img/@alt')[0]
-		res["注册资本"] = self.content.xpath('//div[@class="detail-list"]//div[@id="_container_baseInfo"]/table[@class="table"]//tr/td//text/text()')[0]
+		res["score"] = self.content.xpath('//div[@class="detail-list"]//div[@id="_container_baseInfo"]/table[@class="table -striped-col -border-top-none"]//tr/td/img/@alt')
+		res["注册资本"] = self.content.xpath('//div[@class="detail-list"]//div[@id="_container_baseInfo"]/table[@class="table"]//tr/td//text/text()')
 		
 		return res
 	
@@ -162,17 +162,17 @@ class HtmlContent(object):
 
 if __name__ == "__main__":
 
-#	f = open('./dongfang.html', 'r')
-#	html = f.read()
-#	f.close()
-#	content = etree.HTML(html)
-#	Content = HtmlContent(content)
+	f = open('companies/华夏阀门有限公司.html', 'r')
+	html = f.read()
+	f.close()
+	content = etree.HTML(html)
+	Content = HtmlContent(content)
 	#profile = Content.getProfile()
 	#print profile
 	#market = Content.getMarketInfo()
 	#print market
-	#back = Content.getBackgrounds()
-	#print back
+	back = Content.getBackgrounds()
+	print back
 	#legal = Content.getLegalRisk()
 	#print legal
 	#history = Content.getDevHistory()
@@ -181,14 +181,3 @@ if __name__ == "__main__":
 	#print ip
 	#info = Content.info()
 	#print info
-	for line in sys.stdin:
-		filename = line.strip() + ".html"
-		path = os.path.join("companies", filename)
-
-		with open(path, "r") as f:
-			html = f.read()
-			f.close()
-			content = etree.HTML(html)
-			content = HtmlContent(content)
-			info = content.info()
-			sys.stdout.write(info)
