@@ -12,12 +12,15 @@ from lxml import etree
 import json
 import sys
 import os
+import re
 
 
 
 class HtmlContent(object):
-	def __init__(self, content = None):
-		self.content = content
+
+	def __init__(self, html = None):
+		self.content = etree.HTML(html)
+		self.raw_html = html
 
 	def tester(self, pattern):
 
@@ -35,9 +38,13 @@ class HtmlContent(object):
 			key = key.encode('utf8')
 			value = value.strip(u'\u67e5\u770b\u66f4\u591a')
 			res[key] = value.encode('utf8')
-		abstract = self.content.xpath('//div[@class="container company-header-block "]//script[@id="company_base_info_detail"]/text()')
+		#abstract = self.content.xpath('//div[@class="container company-header-block "]//script[@id="company_base_info_detail"]/text()')
+
+		p = re.compile(r'company_base_info_detail">(.+?)</script', re.S)
+		abstract = p.search(self.raw_html)
+
 		if abstract:
-			res["简介"] = abstract[0].strip()
+			res["简介"] = abstract.group(1).strip()
 		else:
 			res["简介"] = "暂无信息"
 		
@@ -159,14 +166,19 @@ class HtmlContent(object):
 		
 		return json.dumps(info)
 
+def helper():
+	for line in sys.stdin:
+		filename = line.strip() + ".html"
+		path = os.path.join("companies", filename)
+		print path
 
 if __name__ == "__main__":
 
-#	f = open('./dongfang.html', 'r')
-#	html = f.read()
-#	f.close()
-#	content = etree.HTML(html)
-#	Content = HtmlContent(content)
+	f = open('companies/四川本立建筑工程有限公司大邑钢结构分公司.html', 'r')
+	html = f.read()
+	f.close()
+	##content = etree.HTML(html)
+	Content = HtmlContent(html)
 	#profile = Content.getProfile()
 	#print profile
 	#market = Content.getMarketInfo()
@@ -179,16 +191,20 @@ if __name__ == "__main__":
 	#print history
 	#ip = Content.getIntellectualProperty()
 	#print ip
-	#info = Content.info()
-	#print info
-	for line in sys.stdin:
-		filename = line.strip() + ".html"
-		path = os.path.join("companies", filename)
+	info = Content.info()
+	print info
+	#for line in sys.stdin:
+	#	filename = line.strip() + ".html"
+	#	path = os.path.join("companies", filename)
 
-		with open(path, "r") as f:
-			html = f.read()
-			f.close()
-			content = etree.HTML(html)
-			content = HtmlContent(content)
-			info = content.info()
-			sys.stdout.write(info)
+	#	with open(path, "r") as f:
+	#		html = f.read()
+	#		content = HtmlContent(html)
+	#		try:
+	#			#info = content.info()
+	#			#print info
+	#			print content.html
+	#		except:
+	#			print sys.stderr
+	#			pass
+	#helper()	

@@ -8,18 +8,14 @@
 # Description  : copyright sichuankunlun reserved 2018!
 # ******************************************************
 
-import urllib
-import urllib2
 import sys
+import re
 
-url = "http://www.baidu.com/s"
-keyword = raw_input("请输入要查询的字符串:")
-#keyword = sys.argv[1]
-headers = {"User-Agent" : "Mozilla"}
-wd = {"wd" : keyword}
-wd = urllib.urlencode(wd)
-fullurl = url + "?" +  wd
-#print fullurl
-request = urllib2.Request(fullurl, headers = headers)
-response = urllib2.urlopen(request)
-print(response.read())
+with open("dongfang.html", 'r') as f:
+	html = f.read()
+	pattern = re.compile(r'company_base_info_detail">(.+?)</script', re.S)
+	res = pattern.search(html)
+	if res:
+		print "res is ", res.group(1)
+	
+
