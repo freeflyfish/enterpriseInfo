@@ -166,45 +166,50 @@ class HtmlContent(object):
 		
 		return json.dumps(info)
 
-def helper():
+def main():
 	for line in sys.stdin:
 		filename = line.strip() + ".html"
 		path = os.path.join("companies", filename)
-		print path
+		#print path
+		with open(path, 'r') as f:
+			html = f.read()
+			#print html
+			try:	
+				content = HtmlContent(html)
+				print content.info()
+			except:
+				pass
 
-if __name__ == "__main__":
 
+def test():
 	f = open('companies/四川本立建筑工程有限公司大邑钢结构分公司.html', 'r')
 	html = f.read()
 	f.close()
 	##content = etree.HTML(html)
 	Content = HtmlContent(html)
+
 	#profile = Content.getProfile()
 	#print profile
+
 	#market = Content.getMarketInfo()
 	#print market
+
 	#back = Content.getBackgrounds()
 	#print back
+
 	#legal = Content.getLegalRisk()
 	#print legal
+
 	#history = Content.getDevHistory()
 	#print history
+
 	#ip = Content.getIntellectualProperty()
 	#print ip
+
 	info = Content.info()
 	print info
-	#for line in sys.stdin:
-	#	filename = line.strip() + ".html"
-	#	path = os.path.join("companies", filename)
 
-	#	with open(path, "r") as f:
-	#		html = f.read()
-	#		content = HtmlContent(html)
-	#		try:
-	#			#info = content.info()
-	#			#print info
-	#			print content.html
-	#		except:
-	#			print sys.stderr
-	#			pass
-	#helper()	
+
+if __name__ == "__main__":
+
+	main()	
